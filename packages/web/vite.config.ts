@@ -6,6 +6,7 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { visualizer } from 'rollup-plugin-visualizer';
 import path from 'path';
 import fs from 'fs';
+import { pwaManifest } from './pwaManifest';
 
 function getHttpsConfig(): { key: string; cert: string } | false {
     if (process.env.USE_HTTPS === 'false') {
@@ -36,26 +37,12 @@ export default defineConfig({
         tailwindcss(),
         VitePWA({
             registerType: 'prompt',
-            manifest: {
-                name: 'FarmStride',
-                short_name: 'FarmStride',
-                description:
-                    'Log riding sessions by voice and track your horses',
-                display: 'standalone',
-                theme_color: '#ffffff',
-                icons: [
-                    {
-                        src: 'pwa-192x192.png',
-                        sizes: '192x192',
-                        type: 'image/png',
-                    },
-                    {
-                        src: 'pwa-512x512.png',
-                        sizes: '512x512',
-                        type: 'image/png',
-                    },
-                ],
-            },
+            includeAssets: [
+                'favicon.ico',
+                'favicon.svg',
+                'apple-touch-icon.png',
+            ],
+            manifest: pwaManifest,
         }),
         sentryVitePlugin({
             authToken:
