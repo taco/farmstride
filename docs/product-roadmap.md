@@ -1,4 +1,4 @@
-# Herdbook Product Roadmap
+# FarmStride Product Roadmap
 
 _March 2026_
 
@@ -88,7 +88,7 @@ Schema change: `aiMetadata` JSONB column on Session, with `confirmed` boolean an
 
 ### Layer 3: Make the data actionable — AI as training guide
 
-This is where Herdbook becomes a training companion. Each feature builds on the enrichment data.
+This is where FarmStride becomes a training companion. Each feature builds on the enrichment data.
 
 - **Pre-ride briefing** — When starting a session, show handoff context plus the rider's own history. Present the AI extraction for confirmation ("Sounds like you worked on X — right?"). One tap to confirm, raising data confidence for downstream features.
 - **Consolidation nudges** — "Shoulder-in has been coming easily for the last three weeks. Thinking about what to introduce next?" Question-based, not prescriptive.

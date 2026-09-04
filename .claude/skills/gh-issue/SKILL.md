@@ -10,7 +10,7 @@ allowed-tools: Bash, Read, Glob, Grep, Edit, Write, Task, Skill, AskUserQuestion
 - `/gh-issue <number>` — implement GitHub issue by number
 - `/gh-issue <url>` — implement GitHub issue by URL
 
-**Prerequisite:** Launch Claude in a native worktree from the main herdbook checkout: `claude -w issue-<number>`. Root env files are copied in via `.worktreeinclude`; in a fresh worktree run `pnpm install && pnpm run env:local && pnpm --filter api exec prisma generate` (the `env:*` step recreates the `packages/api/.env` symlink, which isn't copied).
+**Prerequisite:** Launch Claude in a native worktree from the main checkout: `claude -w issue-<number>`. Root env files are copied in via `.worktreeinclude`; in a fresh worktree run `pnpm install && pnpm run env:local && pnpm --filter api exec prisma generate` (the `env:*` step recreates the `packages/api/.env` symlink, which isn't copied).
 
 ## Workflow
 

@@ -25,9 +25,10 @@ const ATTR_GEN_AI_USAGE_OUTPUT_TOKENS = 'gen_ai.usage.output_tokens';
 const GEN_AI_PROVIDER_NAME_VALUE_OPENAI = 'openai';
 
 /**
- * Herdbook attributes for spans. Namespaced under `herdbook.` because bare
- * `session.id` collides with OTel's browser-session convention. Opaque IDs
- * only: never names, emails, notes, or prompt/completion text.
+ * FarmStride attributes for spans. Namespaced under `herdbook.` because bare
+ * `session.id` collides with OTel's browser-session convention; the wire
+ * names move to `farmstride.` in #159. Opaque IDs only: never names,
+ * emails, notes, or prompt/completion text.
  */
 export const HERDBOOK_ATTR = {
     RIDER_ID: 'herdbook.rider.id',

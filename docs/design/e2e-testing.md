@@ -1,10 +1,10 @@
-# Herdbook E2E Testing Design Doc
+# FarmStride E2E Testing Design Doc
 
 > **Status**: Implemented. This doc captures the design decisions made. See README for usage.
 
 ## Overview
 
-Herdbook needs automated testing to support confident iteration, CI/CD pipelines, and multi-contributor development (humans and AI agents working across branches). This document explores the problem space and recommends an approach for end-to-end testing.
+FarmStride needs automated testing to support confident iteration, CI/CD pipelines, and multi-contributor development (humans and AI agents working across branches). This document explores the problem space and recommends an approach for end-to-end testing.
 
 ---
 
@@ -20,7 +20,7 @@ Herdbook needs automated testing to support confident iteration, CI/CD pipelines
 - Regressions slip through, especially in flows you didn't think to check
 - Refactoring is scary — no safety net
 
-**Why this matters**: As Herdbook grows (AI features, more UI, production deployment), manual verification doesn't scale. For interview demos, a broken flow at the wrong moment is embarrassing.
+**Why this matters**: As FarmStride grows (AI features, more UI, production deployment), manual verification doesn't scale. For interview demos, a broken flow at the wrong moment is embarrassing.
 
 ### Problem 2: Multi-Contributor Isolation
 
@@ -50,7 +50,7 @@ Herdbook needs automated testing to support confident iteration, CI/CD pipelines
 
 **Tension**: Unit tests are fast but test implementation details. Integration tests are realistic but slower. E2E tests catch real bugs but are slowest and most brittle.
 
-**Why this matters for Herdbook**: The API resolvers are thin — mostly Prisma calls. The real complexity is in the integration: does the web app talk to the API correctly? Does the API talk to the database correctly? Does auth flow end-to-end?
+**Why this matters for FarmStride**: The API resolvers are thin — mostly Prisma calls. The real complexity is in the integration: does the web app talk to the API correctly? Does the API talk to the database correctly? Does auth flow end-to-end?
 
 ---
 
@@ -343,7 +343,7 @@ sessions.spec.ts:
 
 ### Philosophy: Test User Flows, Not Implementation
 
-Given that Herdbook's value is in integration (web → API → DB), tests should exercise the full stack through user-visible behavior.
+Given that FarmStride's value is in integration (web → API → DB), tests should exercise the full stack through user-visible behavior.
 
 ### Critical Paths (Must Test)
 

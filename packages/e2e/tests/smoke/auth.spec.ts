@@ -10,6 +10,12 @@ import { createTestBarn } from '@/utils/testBarn';
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Authentication', () => {
+    test('login page title is FarmStride', async ({ page }) => {
+        await page.goto('/login');
+
+        await expect(page).toHaveTitle('FarmStride');
+    });
+
     test('can log in with valid credentials', async ({ page }) => {
         await page.goto('/login');
 

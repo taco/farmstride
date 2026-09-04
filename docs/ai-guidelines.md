@@ -1,6 +1,6 @@
 # AI Guidelines
 
-Model selection, pricing, and patterns for Herdbook's AI features.
+Model selection, pricing, and patterns for FarmStride's AI features.
 
 ## Model Tiers
 

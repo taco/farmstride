@@ -37,9 +37,10 @@ export default defineConfig({
         VitePWA({
             registerType: 'prompt',
             manifest: {
-                name: 'Herdbook',
-                short_name: 'Herdbook',
-                description: 'Horse management application',
+                name: 'FarmStride',
+                short_name: 'FarmStride',
+                description:
+                    'Log riding sessions by voice and track your horses',
                 display: 'standalone',
                 theme_color: '#ffffff',
                 icons: [

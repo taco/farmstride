@@ -232,7 +232,7 @@ export default function EditHorse() {
                         <CardDescription>
                             {isEditMode
                                 ? "Update your horse's details."
-                                : 'Add a new horse to your herd.'}
+                                : 'Add a new horse to your farm.'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

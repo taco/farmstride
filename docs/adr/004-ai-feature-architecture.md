@@ -5,7 +5,7 @@
 
 ## Context
 
-Herdbook uses LLMs for two features: voice session parsing (transcribe audio → extract structured data) and horse summary generation. Both call external APIs (OpenAI) with costs per request. Without guardrails, it's easy to accidentally use expensive models, skip rate limiting, or scatter prompt strings across the codebase where they can't be versioned or compared.
+FarmStride uses LLMs for two features: voice session parsing (transcribe audio → extract structured data) and horse summary generation. Both call external APIs (OpenAI) with costs per request. Without guardrails, it's easy to accidentally use expensive models, skip rate limiting, or scatter prompt strings across the codebase where they can't be versioned or compared.
 
 We needed a pattern that makes it easy to add new AI features while enforcing cost discipline and operational safety by default.
 

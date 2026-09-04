@@ -112,7 +112,7 @@ export function ServiceWorkerUpdater(): React.ReactNode {
                     </div>
                     <SheetTitle>Update Available</SheetTitle>
                     <SheetDescription>
-                        A new version of Herdbook is ready. Update now for the
+                        A new version of FarmStride is ready. Update now for the
                         latest features and fixes.
                     </SheetDescription>
                 </SheetHeader>

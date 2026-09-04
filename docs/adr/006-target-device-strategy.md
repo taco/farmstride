@@ -5,7 +5,7 @@
 
 ## Context
 
-Herdbook is a barn management tool used primarily at the barn — logging sessions while standing in the arena, checking a horse's history from the grooming stall, reviewing a rider's progress between lessons. This context is overwhelmingly mobile: phones in pockets, often one-handed, sometimes with gloves.
+FarmStride is a barn management tool used primarily at the barn — logging sessions while standing in the arena, checking a horse's history from the grooming stall, reviewing a rider's progress between lessons. This context is overwhelmingly mobile: phones in pockets, often one-handed, sometimes with gloves.
 
 We had to decide whether to build a responsive app (mobile + desktop) or commit to mobile-only. This isn't just a CSS question — it affects component design, navigation architecture, testing strategy, and the features we build.
 

@@ -1,4 +1,4 @@
-# Herdbook
+# FarmStride
 
 [![E2E Nightly](https://github.com/taco/herdbook/actions/workflows/e2e-nightly.yml/badge.svg)](https://github.com/taco/herdbook/actions/workflows/e2e-nightly.yml)
 
