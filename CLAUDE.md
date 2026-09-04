@@ -1,4 +1,4 @@
-# Herdbook Development Guidelines
+# FarmStride Development Guidelines
 
 ## Agent Workflow
 
@@ -176,7 +176,7 @@ Use these skills for common workflows. Invoke with `/skillname` or the Skill too
 
 We are trialing the `mattpocock-skills` flow as the **primary** idea → ship workflow. The Herdbook flow skills below stay installed as the fallback; to end the trial, delete this subsection and the trial caveats elsewhere in this file.
 
-During the trial, use the Matt flow for these stages instead of the Herdbook equivalents:
+During the trial, use the Matt flow for these stages instead of the Herdbook-flow equivalents:
 
 | Stage                                     | Use (trial)                                        | Replaces                   |
 | ----------------------------------------- | -------------------------------------------------- | -------------------------- |
@@ -189,7 +189,7 @@ During the trial, use the Matt flow for these stages instead of the Herdbook equ
 
 Standalone additions usable any time: `/prototype`, `/resolving-merge-conflicts`, `/research`, `/wizard`, `/handoff`.
 
-**Still mandatory during the trial** (Herdbook-specific; the Matt flow doesn't know these):
+**Still mandatory during the trial** (FarmStride-specific; the Matt flow doesn't know these):
 
 - `/preflight` before every commit — format + typecheck are non-negotiable
 - Domain skills whenever applicable: `/schema`, `/new-page`, `/mobile-ux`, `/test-api`, `/test-web`, `/e2e`, `/deploy-preview`, `/updatedocs`

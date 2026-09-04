@@ -57,10 +57,10 @@ export default function Dashboard(): React.ReactNode {
     return (
         <div>
             <div className="p-4 space-y-6">
-                {/* Herd Activity Section */}
+                {/* Farm Activity Section */}
                 <section>
                     <h2 className="text-sm font-medium text-muted-foreground mb-3 px-1">
-                        Herd Activity
+                        Farm Activity
                     </h2>
                     <div className="grid grid-cols-2 gap-3">
                         {data?.horses.map((horse) => (

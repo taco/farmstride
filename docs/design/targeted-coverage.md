@@ -2,7 +2,7 @@
 
 ## Context
 
-Herdbook iterates fast with AI-assisted development. Code gets written quickly, but review can miss untested branches — especially auth checks, data ownership guards, and business logic in resolvers. There's no visibility into what's covered today: no coverage tooling configured, no thresholds, no CI gates.
+FarmStride iterates fast with AI-assisted development. Code gets written quickly, but review can miss untested branches — especially auth checks, data ownership guards, and business logic in resolvers. There's no visibility into what's covered today: no coverage tooling configured, no thresholds, no CI gates.
 
 **Current state**: 13 API test files with strong access control coverage, but no way to verify completeness. Vitest coverage is not configured. CI runs tests but doesn't report what they exercise.
 

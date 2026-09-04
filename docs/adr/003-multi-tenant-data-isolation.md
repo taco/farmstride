@@ -5,7 +5,7 @@
 
 ## Context
 
-Herdbook is a multi-tenant app where each barn is an isolated tenant. Riders should only see horses, sessions, and other riders within their own barn. The question is where to enforce this isolation — in the application (resolver-level `WHERE barnId = X`), in the database (row-level security), or both.
+FarmStride is a multi-tenant app where each barn is an isolated tenant. Riders should only see horses, sessions, and other riders within their own barn. The question is where to enforce this isolation — in the application (resolver-level `WHERE barnId = X`), in the database (row-level security), or both.
 
 Application-level filtering works until someone writes a resolver that forgets the filter, or a raw query that skips it, or a DataLoader that batches across barns. These bugs are silent — the app returns data instead of an error — and hard to catch in review because the _absence_ of a filter clause is invisible.
 

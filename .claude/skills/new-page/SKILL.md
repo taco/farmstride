@@ -1,5 +1,5 @@
 ---
-description: Create a new page following all Herdbook conventions — layout choice (Tab vs FullScreen), header pattern, useAppNavigate, view/edit cascade, drawer editing, Apollo cache, accessibility labels, mobile styling.
+description: Create a new page following all FarmStride conventions — layout choice (Tab vs FullScreen), header pattern, useAppNavigate, view/edit cascade, drawer editing, Apollo cache, accessibility labels, mobile styling.
 allowed-tools: Bash, Read, Glob, Grep, Edit, Write
 ---
 

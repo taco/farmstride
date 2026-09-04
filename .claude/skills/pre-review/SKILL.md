@@ -1,5 +1,5 @@
 ---
-description: Pre-PR code review — delegates generic bug-hunting to the built-in /code-review, then runs Herdbook-specific checks (auth/tenancy, schema sync, AI conventions, mobile web). Run after /preflight, before pushing.
+description: Pre-PR code review — delegates generic bug-hunting to the built-in /code-review, then runs FarmStride-specific checks (auth/tenancy, schema sync, AI conventions, mobile web). Run after /preflight, before pushing.
 allowed-tools: Bash, Read, Glob, Grep, Task, Skill
 ---
 
@@ -15,7 +15,7 @@ allowed-tools: Bash, Read, Glob, Grep, Task, Skill
 Two review passes, merged into one report:
 
 1. **Generic pass** — the built-in `/code-review` skill handles correctness bugs, logic errors, and cleanup findings. It has its own multi-agent adversarial verification; do not duplicate that machinery here.
-2. **Herdbook pass** — project-specific conventions a generic review won't reliably check: auth/tenancy model, schema sync, AI feature conventions, mobile web patterns.
+2. **FarmStride pass** — project-specific conventions a generic review won't reliably check: auth/tenancy model, schema sync, AI feature conventions, mobile web patterns.
 
 Run this **after** `/preflight` passes and **before** pushing or creating a PR.
 
@@ -32,7 +32,7 @@ git log main..HEAD --oneline
 
 Keep the full diff text — step 3's mechanical checks grep it and the domain agents receive their slice of it. `--stat` alone is not enough.
 
-Note which domains the diff touches — this decides which Herdbook checks run in step 3:
+Note which domains the diff touches — this decides which FarmStride checks run in step 3:
 
 | Domain touched   | Signal                                                                                                 |
 | ---------------- | ------------------------------------------------------------------------------------------------------ |
@@ -47,7 +47,7 @@ Invoke the built-in review via the Skill tool: `skill: "code-review"` with args 
 
 Collect its findings for the merged report in step 5.
 
-### 3. Run the Herdbook-specific checks
+### 3. Run the FarmStride-specific checks
 
 #### Mechanical checks (run directly — no agents)
 
@@ -113,7 +113,7 @@ One table, both passes combined, sorted by severity:
 ```
 ## Pre-PR Review
 
-Reviewed N files, M commits against main. Generic pass: /code-review (<level>). Herdbook pass: <domains run>.
+Reviewed N files, M commits against main. Generic pass: /code-review (<level>). FarmStride pass: <domains run>.
 
 | # | Severity | Fix? | Issue | Impact |
 |---|----------|------|-------|--------|

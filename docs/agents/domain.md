@@ -10,7 +10,7 @@ How the engineering skills should consume this repo's domain documentation when 
 
 If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
 
-Herdbook specifics:
+FarmStride specifics:
 
 - `docs/adr/` already exists and uses `NNN-` numbering (`001-graphql-data-fetching.md` … `006-target-device-strategy.md`). Keep that numbering; don't switch to `0001-`.
 - Feature design docs live under `docs/design/` — read the one covering the area you're working in (e.g. `navigation.md`, `voice-first-session.md`).

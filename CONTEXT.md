@@ -1,4 +1,4 @@
-# Herdbook
+# FarmStride
 
 A mobile-first app for riders at a barn to log riding sessions, by voice where possible, and keep track of the horses they work with.
 
@@ -9,7 +9,7 @@ A single ride or training session with one horse, logged by one rider. Never an 
 _Avoid_: Ride, lesson, workout, auth session
 
 **Rider**:
-A person with a Herdbook account. Every logged-in user is a rider, whatever their role at the barn.
+A person with a FarmStride account. Every logged-in user is a rider, whatever their role at the barn.
 _Avoid_: User, account, member
 
 **Barn**:

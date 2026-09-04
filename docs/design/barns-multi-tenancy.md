@@ -2,7 +2,7 @@
 
 ## Context
 
-Herdbook today is flat — all authenticated users see all horses, riders, and sessions. There's no concept of groups or organizations. In the real world, a barn (stable/facility) is the natural boundary: a trainer runs a barn, riders belong to it, horses live there.
+FarmStride today is flat — all authenticated users see all horses, riders, and sessions. There's no concept of groups or organizations. In the real world, a barn (stable/facility) is the natural boundary: a trainer runs a barn, riders belong to it, horses live there.
 
 **Current state**: Rider, Horse, Session models with no grouping. Trainers have elevated permissions globally. Sessions query is unscoped (all riders see all sessions).
 
@@ -158,8 +158,8 @@ The `Barn.inviteCode` field resolver checks `context.rider.role === TRAINER` and
 ## Migration
 
 1. Create `Barn` table
-2. Create a default barn ("Herdbook Barn") with a generated invite code
-3. Set `barnId` on all existing Riders and Horses to the default barn
+2. Create the production barn ("Field Hunter Farm") with a generated invite code
+3. Set `barnId` on all existing Riders and Horses to that barn
 4. Make `barnId` non-nullable
 5. Enable RLS on `Horse`, `Rider`, and `Session` tables
 6. Create RLS policies that filter by `current_setting('app.current_barn_id')`

@@ -82,7 +82,7 @@ Every interactive component needs all states defined **before** implementation:
 
 Verify every interactive element meets minimum sizes:
 
-| Element       | Minimum size | Herdbook standard                    |
+| Element       | Minimum size | FarmStride standard                  |
 | ------------- | ------------ | ------------------------------------ |
 | Buttons       | 44x44px      | `h-10 w-10` (icon) or `min-h-[44px]` |
 | Chips/tags    | 44px height  | `h-11 px-4`                          |
