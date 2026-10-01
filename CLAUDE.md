@@ -33,10 +33,11 @@ Example:
 | Build horse profile page | `/new-page` | New FullScreenLayout page with view/edit |
 | Write resolver tests | `/test-api` | Integration test for new query |
 | Pre-commit checks | `/preflight` | Format + typecheck |
-| Pre-PR review | `/pre-review` | Independent review before push |
+| Standards + spec review | `/mattpocock-skills:code-review` | Applies `docs/review-checklist.md`; built into `/implement` |
+| Bug hunt (touches resolvers) | `/code-review` | Built-in, high effort — required for auth/tenancy diffs |
 ```
 
-Plans must always include `/pre-review` after `/preflight`, in both the Skills table and the Verification section. (Trial caveat: while the mattpocock-skills trial is active — see Skills section — work done via `/implement` uses its built-in code-review in place of `/pre-review`; `/preflight` is still required.)
+Plans must always include the review passes from Skills → "Code review" after `/preflight`, in both the Skills table and the Verification section.
 
 ## Commands
 
@@ -112,13 +113,22 @@ Leave the codebase slightly better than you found it. When a change reveals near
     - `docs`: documentation only
     - `refactor`: code restructuring, no behavior change
 - Prefer `git add <file>` over `git add .`
-- Do not add any co-author lines in commit messages
+- Credit Claude as co-author on everything it helps produce (see "Claude attribution" below)
 - The top message should be short and easy to read without losing context
 - Seperate details should be order in terms for weight, most important at the top
 
+### Claude attribution
+
+Claude is a co-author, not a hidden tool. Credit it consistently on anything pushed to GitHub:
+
+- **Commits**: end the message with the trailer `Co-Authored-By: Claude <noreply@anthropic.com>` (generic name, not a model/generation name — those go stale). GitHub renders this as a co-author avatar.
+- **Pull requests**: end the body with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`.
+- **Issues**: end the body with `🤖 Drafted with [Claude Code](https://claude.com/claude-code)` when Claude wrote or substantially shaped it.
+- Do not include Claude session URLs or other conversation links — attribution yes, tooling breadcrumbs no.
+
 ## Worktrees
 
-Parallel work uses Claude Code's native worktrees (the old `/worktree` skill is retired):
+Parallel work uses Claude Code's native worktrees:
 
 - Start a session in a worktree: `claude -w issue-<number>` (or any name; `claude -w "#<PR>"` branches from a PR). Worktrees live under `.claude/worktrees/` and branch from up-to-date `origin/main`.
 - Gitignored env files and local SSL certs are copied into new worktrees automatically via `.worktreeinclude` (repo root).
@@ -131,8 +141,9 @@ Parallel work uses Claude Code's native worktrees (the old `/worktree` skill is 
 All issues are tracked in the [Herdbook Backlog](https://github.com/users/taco/projects/1) GitHub Project (project #1, owner: taco).
 
 - **Priority lives on the board** (custom field), not in labels. Do not create priority labels.
-- Every new issue must be added to the project with **Priority**, **Type**, and **Package** fields set (see `/write-issue` skill for field IDs).
-- When starting work on an issue, set its Status to **In Progress** (see `/gh-issue` skill).
+- Every new issue must be added to the project with **Priority**, **Type**, and **Package** fields set.
+- When starting work on an issue, set its Status to **In Progress**.
+- Board commands and field IDs live in `docs/agents/issue-tracker.md`.
 - **Active milestone**: Marked with `[ACTIVE]` prefix in its GitHub description. Issues in the active milestone default to P2-medium; other milestones default to P3-low. Bugs always default to P1-high regardless of milestone.
     - Query: `gh api repos/taco/herdbook/milestones --jq '.[] | select(.description | startswith("[ACTIVE]"))'`
     - To change: remove `[ACTIVE]` from old milestone description, add to new one.
@@ -140,7 +151,7 @@ All issues are tracked in the [Herdbook Backlog](https://github.com/users/taco/p
 
 ## Design Docs
 
-- After `/design` creates issues on GitHub, update the design doc's issue headings to use real issue numbers with full links: `### [#84](https://github.com/taco/herdbook/issues/84): Title`
+- After `/to-tickets` creates issues on GitHub, update the design doc's issue headings to use real issue numbers with full links: `### [#84](https://github.com/taco/herdbook/issues/84): Title`
 - Link the milestone in the Issues section heading
 - Code TODOs for future work must reference the real issue: `TODO(#84)`
 
@@ -167,37 +178,39 @@ Use these skills for common workflows. Invoke with `/skillname` or the Skill too
 | Pre-commit checks                  | `/preflight`      |
 | Railway preview deploys            | `/deploy-preview` |
 | Update docs after changes          | `/updatedocs`     |
-| Implement a GitHub issue           | `/gh-issue`       |
-| Write a well-scoped GitHub issue   | `/write-issue`    |
-| Pre-PR independent code review     | `/pre-review`     |
-| Design conversation before coding  | `/design`         |
 
-### Workflow trial: mattpocock-skills (started 2026-08-31)
+### Idea → ship flow: mattpocock-skills
 
-We are trialing the `mattpocock-skills` flow as the **primary** idea → ship workflow. The Herdbook flow skills below stay installed as the fallback; to end the trial, delete this subsection and the trial caveats elsewhere in this file.
+The `mattpocock-skills` plugin drives the idea → ship workflow:
 
-During the trial, use the Matt flow for these stages instead of the Herdbook-flow equivalents:
-
-| Stage                                     | Use (trial)                                        | Replaces                   |
-| ----------------------------------------- | -------------------------------------------------- | -------------------------- |
-| Sharpening an idea                        | `/grill-with-docs` (leaves `CONTEXT.md` + ADRs)    | `/design`                  |
-| Spec + tickets for multi-session work     | `/to-spec` → `/to-tickets`                         | `/write-issue`             |
-| Implementing a ticket (fresh context per) | `/implement` (drives `/tdd`, runs its code-review) | `/gh-issue`, `/pre-review` |
-| Incoming raw bugs/requests                | `/triage`                                          | ad-hoc issue writing       |
-| Hard bug, flake, or regression            | `/diagnosing-bugs`                                 | —                          |
-| Foggy multi-session effort                | `/wayfinder` → hands off to `/to-spec`             | —                          |
+| Stage                                     | Use                                                |
+| ----------------------------------------- | -------------------------------------------------- |
+| Sharpening an idea                        | `/grill-with-docs` (leaves `CONTEXT.md` + ADRs)    |
+| Spec + tickets for multi-session work     | `/to-spec` → `/to-tickets`                         |
+| Implementing a ticket (fresh context per) | `/implement` (drives `/tdd`, runs its code-review) |
+| Incoming raw bugs/requests                | `/triage`                                          |
+| Hard bug, flake, or regression            | `/diagnosing-bugs`                                 |
+| Foggy multi-session effort                | `/wayfinder` → hands off to `/to-spec`             |
 
 Standalone additions usable any time: `/prototype`, `/resolving-merge-conflicts`, `/research`, `/wizard`, `/handoff`.
 
-**Still mandatory during the trial** (FarmStride-specific; the Matt flow doesn't know these):
+**Always mandatory** (FarmStride-specific; the Matt flow doesn't know these):
 
 - `/preflight` before every commit — format + typecheck are non-negotiable
+- Code review as defined under "Code review" below
 - Domain skills whenever applicable: `/schema`, `/new-page`, `/mobile-ux`, `/test-api`, `/test-web`, `/e2e`, `/deploy-preview`, `/updatedocs`
 - Project board conventions: issues created by `/to-tickets` or `/triage` still get Priority/Type/Package fields on the board, and Status → In Progress when picked up
-- Git conventions above (conventional commits, no co-authors)
+- Git conventions above (conventional commits, Claude co-author trailer on commits, attribution footer on PRs and issues)
 - Testing Philosophy above: `/tdd` inside `/implement` is fine, but keep tests high-ROI and integration-focused — no red-green-refactoring trivial code
 
 **Precondition**: run `/setup-matt-pocock-skills` once before the first flow, pointing it at the existing GitHub Project board (custom trackers are supported). Do not let it create priority labels — priority lives on the board.
+
+### Code review
+
+Two skills share the name `code-review`; each has its own job:
+
+- **Standards + spec** → `/mattpocock-skills:code-review`. This is the review `/implement` runs when it finishes; run it directly for work done outside `/implement`. It applies `docs/review-checklist.md` — FarmStride auth/tenancy, schema, AI, and mobile-web checks a generic review misses.
+- **Bug hunt** → the built-in `/code-review` at `high` effort, before the PR. Required for any diff touching resolvers, `schema.graphql`, or auth code (the Auth/tenancy domain in `docs/review-checklist.md`): the standards pass does not hunt correctness bugs, and a resolver missing its `barnId` filter is a cross-tenant data leak. After it reports, check the diff against the checklist's Auth/tenancy section line by line.
 
 ## Agent skills
 
@@ -224,14 +237,15 @@ When working with Honeycomb:
 
 ## New Feature Workflow
 
-(Trial caveat: while the mattpocock-skills trial is active, steps 0, and 6–7's review, follow the trial table in the Skills section instead: `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement`. Steps 1–5 and `/preflight` still apply inside implementation.)
+0. Sharpen the idea, then spec and tickets (if needed) → `/grill-with-docs` → `/to-spec` → `/to-tickets`
 
-0. Design conversation (if needed) → `/design`
+Then per ticket, inside `/implement`:
+
 1. Mobile UX analysis → `/mobile-ux`
 2. Define schema (Prisma + GraphQL) → `/schema`
 3. Implement resolvers
 4. Build UI and connect → `/new-page`
 5. Write tests → `/test-api`, `/test-web`, `/e2e`
 6. Pre-commit check → `/preflight`
-7. Pre-PR review → `/pre-review`
+7. Code review → standards + spec review built into `/implement`, plus the built-in bug hunt for auth/tenancy diffs (see Skills → "Code review")
 8. Update docs → `/updatedocs`

@@ -17,11 +17,41 @@ Infer the repo from `git remote -v`; `gh` does this automatically when run insid
 
 These override anything above when in conflict:
 
-- Every created issue must be added to the Herdbook Backlog project (project #1, owner: taco) with **Priority**, **Type**, and **Package** fields set — see the `/write-issue` skill for field IDs.
+- Every created issue must be added to the Herdbook Backlog project (project #1, owner: taco) with **Priority**, **Type**, and **Package** fields set — commands and field IDs under [Board commands](#board-commands).
 - **Priority lives on the board**, never in labels. Do not create priority labels.
-- Milestone defaults: issues in the `[ACTIVE]` milestone → P2-medium, other milestones → P3-low, bugs → P1-high regardless of milestone.
-- When work starts on an issue, set board Status to **In Progress**.
+- **Labels** go on at creation via `--label` flags, never as a separate step: exactly one type label (`feature`, `bug`, `chore`, `documentation`, `refactor`) plus every scope label that applies (`api`, `web`, `e2e`, `ai`, `security`, `schema`).
+- Milestone defaults: issues in the `[ACTIVE]` milestone → P2-medium, other milestones → P3-low, bugs → P1-high regardless of milestone (security bugs → P0-critical).
+- When work starts on an issue, set board Status to **In Progress** and write `ISSUE=<number>` to `.state` at the worktree root (gitignored; the statusline renders it as a clickable `#<number>`).
 - Branches for an issue use `<type>/<issue>-<slug>` (conventional commit types).
+- **Claude attribution**: issues and PRs Claude drafts end with the footer from the "Claude attribution" section of `CLAUDE.md` (`🤖 Drafted with [Claude Code](https://claude.com/claude-code)` for issues, `🤖 Generated with [Claude Code](https://claude.com/claude-code)` for PRs); commits carry the `Co-Authored-By: Claude <noreply@anthropic.com>` trailer. No session links.
+- **Known limitation**: the repo-scoped fine-grained PAT used for `gh` cannot access the user-owned project board (`user.projectV2` — fine-grained PATs don't support user Projects V2 at all). `gh project item-add`/`item-edit` will fail; after creating an issue, tell the user to add it to the board and set Priority/Type/Package in the UI instead of retrying.
+
+## Board commands
+
+Project `PVT_kwHOACMj-84BRjUG` (Herdbook Backlog, project #1, owner: taco).
+
+```bash
+# Add an issue to the board
+gh project item-add 1 --owner taco --url "https://github.com/taco/herdbook/issues/<number>"
+
+# Find its item ID (substitute the issue number as an integer, not a string)
+ITEM_ID=$(gh project item-list 1 --owner taco --limit 100 --format json | python3 -c "
+import json, sys
+for item in json.load(sys.stdin)['items']:
+    if item['content'].get('number') == <issue_number>:
+        print(item['id']); break
+")
+
+# Set a single-select field
+gh project item-edit --project-id PVT_kwHOACMj-84BRjUG --id $ITEM_ID --field-id <FIELD_ID> --single-select-option-id <OPTION_ID>
+```
+
+| Field    | Field ID                         | Option IDs                                                                                 |
+| -------- | -------------------------------- | ------------------------------------------------------------------------------------------ |
+| Priority | `PVTSSF_lAHOACMj-84BRjUGzg_WM8I` | P0-critical `2c26d657`, P1-high `95acdd5f`, P2-medium `7771b4e8`, P3-low `aa387660`        |
+| Type     | `PVTSSF_lAHOACMj-84BRjUGzg_WPJY` | feature `7711276b`, bug `8720351c`, chore `1bb60516`, refactor `67d23443`, docs `55b2d675` |
+| Package  | `PVTSSF_lAHOACMj-84BRjUGzg_WM8c` | api `0ecce83b`, web `ae70ba8a`, e2e `1f4d129d`, both `211c2787`, infra `75373afa`          |
+| Status   | `PVTSSF_lAHOACMj-84BRjUGzg_WM4I` | In Progress `47fc9ee4`                                                                     |
 
 ## Pull requests as a triage surface
 
