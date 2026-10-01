@@ -210,7 +210,14 @@ Standalone additions usable any time: `/prototype`, `/resolving-merge-conflicts`
 Two skills share the name `code-review`; each has its own job:
 
 - **Standards + spec** → `/mattpocock-skills:code-review`. This is the review `/implement` runs when it finishes; run it directly for work done outside `/implement`. It applies `docs/review-checklist.md` — FarmStride auth/tenancy, schema, AI, and mobile-web checks a generic review misses.
-- **Bug hunt** → the built-in `/code-review` at `high` effort, before the PR. Required for any diff touching resolvers, `schema.graphql`, or auth code (the Auth/tenancy domain in `docs/review-checklist.md`): the standards pass does not hunt correctness bugs, and a resolver missing its `barnId` filter is a cross-tenant data leak. After it reports, check the diff against the checklist's Auth/tenancy section line by line.
+- **Bug hunt** → the built-in `/code-review` at `high` effort, before the PR. Required for any diff touching resolvers, `schema.graphql`, or auth code (the Auth/tenancy domain in `docs/review-checklist.md`): the standards pass does not hunt correctness bugs, and a resolver missing its `barnId` filter is a cross-tenant data leak. After it reports, check the diff line by line against the invariants in `docs/agents/review.md` ("What has mattered in this repo") and the checklist's Auth/tenancy section.
+
+Every review starts from `docs/agents/review.md`, the shared brief: what a review is for, what to skip, and the repo's auth, tenancy, and data invariants. `docs/review-checklist.md` adds the standards checks on top.
+
+On GitHub, the same brief drives two advisory workflows. Neither is a required check:
+
+- **Automatic review** (`.github/workflows/claude-review.yml`) runs once when a PR is opened or marked ready, not on later pushes. It posts inline comments plus one summary comment.
+- **`@claude`** (`.github/workflows/claude.yml`) in a PR comment from a repo writer answers a question, re-reviews, or pushes a fix commit to the PR branch.
 
 ## Agent skills
 

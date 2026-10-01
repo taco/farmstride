@@ -1,0 +1,107 @@
+name: Claude
+
+# `@claude` in a PR comment: answers questions, re-reviews, or pushes a fix
+# commit to the PR branch. The automatic review lives in claude-review.yml.
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  # Decides whether Claude runs and whose comments it may read. This repo is
+  # public and the job below can push, so everything else is skipped (not
+  # failed): comments without @claude, plain issues, bots (including Claude's
+  # own replies), non-writers, fork PRs, and PRs a non-writer opened.
+  gate:
+    if: >-
+      contains(github.event.comment.body, '@claude') &&
+      github.event.comment.user.type != 'Bot' &&
+      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association) &&
+      (github.event_name == 'pull_request_review_comment' || github.event.issue.pull_request)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      trusted_pr: ${{ steps.pr.outputs.trusted }}
+      writers: ${{ steps.writers.outputs.logins }}
+
+    steps:
+      # Always the default branch, so the local action below is trusted code.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 1
+
+      - uses: ./.github/actions/repo-writers
+        id: writers
+
+      # The PR's code and description reach Claude too, so both must come from
+      # a writer: a branch in this repo, opened by someone with write access.
+      - name: Check the PR is a writer's, from this repo
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+        run: |
+          trusted=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq '
+            (.head.repo.full_name == .base.repo.full_name) and
+            (.author_association | test("^(OWNER|MEMBER|COLLABORATOR)$"))')
+          if [ "$trusted" != "true" ]; then
+            echo "::notice::@claude only runs on PRs a repo writer opened from a branch in this repo"
+          fi
+          echo "trusted=$trusted" >> "$GITHUB_OUTPUT"
+
+  claude:
+    needs: gate
+    if: needs.gate.outputs.trusted_pr == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.issue.number || github.event.pull_request.number }}/head
+          fetch-depth: 1
+
+      # Same setup as ci.yml, so Claude can run the repo's checks (the husky
+      # pre-commit hook runs `pnpm run check` on every fix commit).
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter api run prisma:generate
+        env:
+          DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
+
+      # No `prompt` input: with one, the action ignores the comment and runs the
+      # prompt instead. Without it, Claude does what the comment asks.
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          include_comments_by_actor: ${{ needs.gate.outputs.writers }}
+          # pnpm is limited to install and package scripts. A bare `pnpm exec`
+          # would run any binary, including git and gh, around the push wrapper
+          # and the comment filter above.
+          claude_args: |
+            --model opus
+            --effort medium
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(pnpm install:*),Bash(pnpm run:*),Bash(pnpm --filter api run:*),Bash(pnpm --filter web run:*)"
+            --append-system-prompt "When asked to review, follow docs/agents/review.md. When asked for a code change: add new commits to the PR branch and never amend, rebase, or force-push; stage only the files you changed, by path, and never use git add -A; run pnpm run format and pnpm run check before pushing; write a conventional commit message that ends with the trailer Co-Authored-By: Claude <noreply@anthropic.com>."

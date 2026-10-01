@@ -1,0 +1,32 @@
+name: Repo writers
+description: >-
+  Lists the logins with push access to this repo, in the format
+  claude-code-action's include_comments_by_actor expects. The repo is public,
+  so Claude only gets comment text from people who can already push here.
+
+outputs:
+  logins:
+    description: Comma-separated logins with push access, plus claude[bot]
+    value: ${{ steps.list.outputs.logins }}
+
+runs:
+  using: composite
+  steps:
+    - id: list
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        ACTOR: ${{ github.actor }}
+      run: |
+        writers=$(gh api "repos/$GITHUB_REPOSITORY/collaborators" --paginate \
+          --jq '.[] | select(.permissions.push) | .login') || writers=""
+
+        # Fail closed: an empty include list would let every commenter through,
+        # so fall back to the triggering actor (the action verifies their write
+        # access itself).
+        if [ -z "$writers" ]; then
+          echo "::warning::Could not list repo writers; limiting Claude's comment context to $ACTOR"
+          writers="$ACTOR"
+        fi
+
+        echo "logins=$(echo "$writers" | paste -sd, -),claude[bot]" >> "$GITHUB_OUTPUT"
